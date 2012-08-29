@@ -9,14 +9,22 @@ def setAndroidPathEnv(configObj):
     toolchainCommand = '$NDK/build/tools/make-standalone-toolchain.sh --platform=android-%(level)s --install-dir=%(install-dir)s --arch=%(arch)s' % {'level':level, 'arch':arch, 'install-dir':toolchainInstallDir}
     subprocess.call(toolchainCommand, shell=True)
     
-    os.putenv('ANDROID_STANDALONE_TOOLCHAIN', toolchainInstallDir)    
+    os.putenv('ANDROID_STANDALONE_TOOLCHAIN', toolchainInstallDir) 
 
 def getCmakeToolchainFileName(configObj):
     androidCmakePath = configObj.get('ANDROID', 'CMAKE_PATH')
     return '%s/toolchain/android.toolchain.cmake' % androidCmakePath
 
+def cmakeDefineString(key, value):
+    return '-D%(key)s=%(value)s' % {'key':key, 'value':value}
+
+def getDefineList(configObj):
+    level = configObj.get('NDK', 'LEVEL')
+    abi = configObj.get('NDK', 'ARCH_ABI')
+    return [cmakeDefineString('CMAKE_TOOLCHAIN_FILE', getCmakeToolchainFileName(configObj)), cmakeDefineString('ANDROID_NATIVE_API_LEVEL', level), cmakeDefineString('ANDROID_ABI', abi)]
+
 def executeCmake(configObj, args):
-    command = 'cmake -DCMAKE_TOOLCHAIN_FILE=%s %s' % (getCmakeToolchainFileName(configObj),  ' '.join(args))
+    command = 'cmake %(defines)s %(args)s' % {'defines':' '.join(getDefineList(configObj)), 'args':' '.join(args)}
     print command
     subprocess.call(command, shell=True)
 
