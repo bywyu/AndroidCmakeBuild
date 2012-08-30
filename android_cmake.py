@@ -1,5 +1,8 @@
 # -*-encoding=utf-8 -*-
 import ConfigParser, os, shlex, subprocess, sys
+
+pythonFileAbsDirPath = os.path.dirname( os.path.abspath(__file__) )
+
     
 def setAndroidPathEnv(configObj):
     ndkPath = configObj.get('ANDROID', 'NDK_PATH')
@@ -12,7 +15,7 @@ def setAndroidPathEnv(configObj):
     os.putenv('ANDROID_STANDALONE_TOOLCHAIN', toolchainInstallDir) 
 
 def getCmakeToolchainFileName(configObj):
-    androidCmakePath = configObj.get('ANDROID', 'CMAKE_PATH')
+    androidCmakePath = os.path.join(pythonFileAbsDirPath, 'android-cmake')
     return '%s/toolchain/android.toolchain.cmake' % androidCmakePath
 
 def cmakeDefineString(key, value):
@@ -34,7 +37,6 @@ if __name__ == '__main__':
     if  len(sys.argv) < 2:
         print "python android_cmake_build.py [cmake args]"
     else:
-        pythonFileAbsDirPath = os.path.dirname( os.path.abspath(__file__) )
         configObj = ConfigParser.RawConfigParser()
         configObj.read( os.path.join(pythonFileAbsDirPath, "config.ini") ) 
         setAndroidPathEnv(configObj)
