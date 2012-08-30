@@ -30,7 +30,7 @@ def executeCmake(configObj, args):
 
 if __name__ == '__main__':
     if  len(sys.argv) < 2:
-        subprocess.call("python android_cmake_build.py [cmake args]", shell=True)
+        print "python android_cmake_build.py [cmake args]"
     else:
         pythonFileAbsDirPath = os.path.dirname( os.path.abspath(__file__) )
         configObj = ConfigParser.RawConfigParser()
