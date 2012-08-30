@@ -21,7 +21,7 @@ def cmakeDefineString(key, value):
 def getDefineList(configObj):
     level = configObj.get('NDK', 'LEVEL')
     abi = configObj.get('NDK', 'ARCH_ABI')
-    return [cmakeDefineString('CMAKE_TOOLCHAIN_FILE', getCmakeToolchainFileName(configObj)), cmakeDefineString('ANDROID_NATIVE_API_LEVEL', level), cmakeDefineString('ANDROID_ABI', abi)]
+    return [cmakeDefineString('CMAKE_TOOLCHAIN_FILE', getCmakeToolchainFileName(configObj)), cmakeDefineString('ANDROID_NATIVE_API_LEVEL', level), cmakeDefineString('ANDROID_ABI', abi), cmakeDefineString('ANDROID', 'ON')]
 
 def executeCmake(configObj, args):
     command = 'cmake %(defines)s %(args)s' % {'defines':' '.join(getDefineList(configObj)), 'args':' '.join(args)}
