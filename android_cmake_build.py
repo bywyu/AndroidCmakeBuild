@@ -32,7 +32,8 @@ if __name__ == '__main__':
     if  len(sys.argv) < 2:
         subprocess.call("python android_cmake_build.py [cmake args]", shell=True)
     else:
+        pythonFileAbsDirPath = os.path.dirname( os.path.abspath(__file__) )
         configObj = ConfigParser.RawConfigParser()
-        configObj.read("config.ini") 
+        configObj.read( os.path.join(pythonFileAbsDirPath, "config.ini") ) 
         setAndroidPathEnv(configObj)
         executeCmake(configObj, sys.argv[1:])
