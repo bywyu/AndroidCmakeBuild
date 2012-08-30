@@ -22,8 +22,7 @@ def getDefineList(configObj):
     defineList = [('CMAKE_TOOLCHAIN_FILE', getCmakeToolchainFileName(configObj)),
                 ('ANDROID_NATIVE_API_LEVEL', configObj.get('NDK', 'LEVEL')),
                 ('ANDROID_ABI', configObj.get('NDK', 'ARCH_ABI')),
-                ('ANDROID', 'ON'),
-                ('BUILD_SHARED_LIBS', 'OFF')] # share로 안드로이드 빌드시 문제가 발생하여서 항상 static으로 빌드되도록 함
+                ('ANDROID', 'ON')]
     return map(lambda (x,y): cmakeDefineString(x,y), defineList)
 
 def executeCmake(configObj, args):
