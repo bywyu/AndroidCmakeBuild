@@ -9,12 +9,22 @@ def setAndroidPathEnv(configObj):
     os.putenv('NDK', ndkPath)
     
     level, arch, toolchainInstallDir = configObj.get('NDK', 'LEVEL'), configObj.get('NDK', 'ARCH'), configObj.get('NDK', 'TOOLCHAIN_INSTALL_DIR')
-    toolchainCommand = '$NDK/build/tools/make-standalone-toolchain.sh --platform=android-%(level)s --install-dir=%(install-dir)s --arch=%(arch)s' % {'level':level, 'arch':arch, 'install-dir':toolchainInstallDir}
+    toolchainCommand = '$NDK/build/tools/make-standalone-toolchain.sh --platform=android-%(level)s --install-dir=%(install-dir)s --arch=%(arch)s --toolchain=%(toolchain)s' \
+    % {'level':level, 'arch':arch, 'install-dir':toolchainInstallDir, 'toolchain':getToolchainName(configObj)}
     subprocess.call(toolchainCommand, shell=True)
     
-    os.putenv('ANDROID_STANDALONE_TOOLCHAIN', toolchainInstallDir) 
+    os.putenv('ANDROID_STANDALONE_TOOLCHAIN', toolchainInstallDir)
 
-def getCmakeToolchainFileName(configObj):
+def getToolchainName(configObj):
+    arch = configObj.get('NDK', 'ARCH')
+    prefixStrList = {'arm':'arm', 'mips':'mipsel', 'x86':'x86'}
+
+    if arch == 'x86':
+        return '%s-4.3.3' % prefixStrList.get(arch)
+    else:
+        return '%s-linux-androideabi-4.3.3' % prefixStrList.get(arch)
+
+def getCmakeToolchainFileName():
     androidCmakePath = os.path.join(pythonFileAbsDirPath, 'android-cmake')
     return '%s/toolchain/android.toolchain.cmake' % androidCmakePath
 
@@ -22,7 +32,7 @@ def cmakeDefineString(key, value):
     return '-D%(key)s=%(value)s' % {'key':key, 'value':value}
 
 def getDefineList(configObj):
-    defineList = [('CMAKE_TOOLCHAIN_FILE', getCmakeToolchainFileName(configObj)),
+    defineList = [('CMAKE_TOOLCHAIN_FILE', getCmakeToolchainFileName()),
                 ('ANDROID_NATIVE_API_LEVEL', configObj.get('NDK', 'LEVEL')),
                 ('ANDROID_ABI', configObj.get('NDK', 'ARCH_ABI')),
                 ('ANDROID', 'ON')]
