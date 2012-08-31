@@ -34,5 +34,5 @@ AndroidCmakeBuild
 	TOOLCHAIN_INSTALL_DIR={android ndk를 standalone toolchain으로 만들 때 toolchain이 설치될 경로} ex) /home/user/my-android-toolchain
 
 4. "cmake" 대신 "python android_cmake.py"를 사용하여 빌드한다.
-	
+
 	ex) $ cmake ../ => $ python android_cmake.py ../
