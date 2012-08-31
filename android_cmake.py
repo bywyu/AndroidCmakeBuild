@@ -20,9 +20,9 @@ def getToolchainName(configObj):
     prefixStrList = {'arm':'arm', 'mips':'mipsel', 'x86':'x86'}
 
     if arch == 'x86':
-        return '%s-4.3.3' % prefixStrList.get(arch)
+        return '%s-4.4.3' % prefixStrList.get(arch)
     else:
-        return '%s-linux-androideabi-4.3.3' % prefixStrList.get(arch)
+        return '%s-linux-androideabi-4.4.3' % prefixStrList.get(arch)
 
 def getCmakeToolchainFileName():
     androidCmakePath = os.path.join(pythonFileAbsDirPath, 'android-cmake')
